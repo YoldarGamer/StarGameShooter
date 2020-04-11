@@ -14,8 +14,11 @@ public class MenuScreen extends BaseScreen {
     private Texture img;
     private Texture ship;
     private Vector2 pos;
+    private Vector2 clickpos;
     private Vector2 v;
+    private Vector2 tmp;
     private float rotate;
+    private float distance;
 
     @Override
     public void show() {
@@ -23,8 +26,10 @@ public class MenuScreen extends BaseScreen {
         img = new Texture("MainBG.jpg");
         ship = new Texture("ship.png");
         pos = new Vector2();
+        clickpos = new Vector2();
         v = new Vector2(0.0f,0.0f);
         rotate = 0;
+        tmp = new Vector2();
     }
 
     @Override
@@ -43,12 +48,15 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        pos.set(screenX,Gdx.graphics.getHeight() - screenY);
+        clickpos.set(screenX,Gdx.graphics.getHeight() - screenY);
+        v.set(clickpos.cpy().sub(pos)).nor();
         return false;
     }
 
     private void update (float delta){
-        pos.add(v);
+        tmp.set(clickpos);
+        distance = tmp.sub(pos).len();
+        if ( distance > 0.5f) {pos.add(v);}
     }
 
     private void draw(){
