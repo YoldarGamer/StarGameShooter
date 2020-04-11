@@ -42,6 +42,9 @@ public class Sprite extends Rect {
     public void resize (Rect worldBounds) {
     }
 
+    private void update (float delta){
+    }
+
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         return false;
     }
