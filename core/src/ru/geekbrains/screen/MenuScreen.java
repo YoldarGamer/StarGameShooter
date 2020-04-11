@@ -14,7 +14,6 @@ public class MenuScreen extends BaseScreen {
     private Texture img;
     private Texture ship;
     private Vector2 pos;
-    private Vector2 clickpos;
     private Vector2 v;
     private Vector2 tmp;
     private float rotate;
@@ -26,7 +25,6 @@ public class MenuScreen extends BaseScreen {
         img = new Texture("MainBG.jpg");
         ship = new Texture("ship.png");
         pos = new Vector2();
-        clickpos = new Vector2();
         v = new Vector2(0.0f,0.0f);
         rotate = 0;
         tmp = new Vector2();
@@ -47,14 +45,13 @@ public class MenuScreen extends BaseScreen {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        clickpos.set(screenX,Gdx.graphics.getHeight() - screenY);
-        v.set(clickpos.cpy().sub(pos)).nor();
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        pos.set(touch);
         return false;
     }
 
     private void update (float delta){
-        tmp.set(clickpos);
+//        tmp.set(touch);
         distance = tmp.sub(pos).len();
         if ( distance > 0.5f) {pos.add(v);}
     }
@@ -63,8 +60,9 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(img, 0, 0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        batch.draw(new TextureRegion(ship), pos.x, pos.y,50,50,100,100,1,1,rotate);
+        batch.draw(img, -1f, -1f, 2f,2f);
+  //      batch.draw(new TextureRegion(ship), pos.x, pos.y,50,50,100,100,1,1,rotate);
+        batch.draw(ship, pos.x, pos.y, 0.25f, 0.25f);
         batch.end();
     }
 }
