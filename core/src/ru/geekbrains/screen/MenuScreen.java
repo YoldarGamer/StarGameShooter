@@ -11,40 +11,28 @@ import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.exception.GameException;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprites.Background;
+import ru.geekbrains.sprites.Ship;
 
 public class MenuScreen extends BaseScreen {
 
     private Texture bg;
+    private Texture sp;
     private Background background;
-    private Texture ship;
-    private Vector2 pos;
-    private Vector2 v;
-    private Vector2 tmp;
-    private float rotate;
-    private float distance;
+    private Ship ship;
+
 
     @Override
     public void show() {
         super.show();
         //bg = new Texture("textures/bg.png");
-        bg = new Texture("textures/MainBG.jpg");
-        try {
-            background = new Background(bg);
-        } catch (GameException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        ship = new Texture("ship.png");
-        pos = new Vector2();
-        v = new Vector2(0.0f,0.0f);
-        rotate = 0;
-        tmp = new Vector2();
+        bg = new Texture("MainBG.jpg");
+        sp = new Texture("ship.png");
+        initSprites();
     }
 
     @Override
     public void render(float delta) {
         update(delta);
-        rotate += delta*10;
         draw();
     }
 
@@ -58,27 +46,34 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
+        ship.resize(worldBounds);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        pos.set(touch);
+        ship.touchDown(touch,pointer,button);
         return false;
     }
 
+    private void initSprites(){
+        try {
+            background = new Background(bg);
+            ship = new Ship(sp);
+        } catch (GameException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void update (float delta){
-//        tmp.set(touch);
-        distance = tmp.sub(pos).len();
-        if ( distance > 0.5f) {pos.add(v);}
+        ship.update(delta);
     }
 
     private void draw(){
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-  //      batch.draw(bg, -1f, -1f, 2f,2f);
-  //      batch.draw(new TextureRegion(ship), pos.x, pos.y,50,50,100,100,1,1,rotate);
         background.draw(batch);
+        ship.draw(batch);
         batch.end();
     }
 }
