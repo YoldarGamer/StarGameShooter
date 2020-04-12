@@ -17,7 +17,7 @@ import ru.geekbrains.sprites.Star;
 
 public class MenuScreen extends BaseScreen {
 
-    private static final int STAR_COUNT=256;
+    private static final int STAR_COUNT=128;
 
     private Texture bg;
     private Texture sp;
