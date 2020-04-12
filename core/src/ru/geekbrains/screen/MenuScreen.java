@@ -54,10 +54,10 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
-        ship.resize(worldBounds);
         for (Star star : stars){
             star.resize(worldBounds);
         }
+        ship.resize(worldBounds);
     }
 
     @Override
@@ -69,21 +69,21 @@ public class MenuScreen extends BaseScreen {
     private void initSprites(){
         try {
             background = new Background(bg);
-            ship = new Ship(sp);
             stars = new Star[STAR_COUNT];
             for (int i=0;i<STAR_COUNT;i++){
                 stars[i] = new Star(atlas);
             }
+            ship = new Ship(sp);
         } catch (GameException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void update (float delta){
-        ship.update(delta);
         for (Star star : stars){
             star.update(delta);
         }
+        ship.update(delta);
     }
 
     private void draw(){
@@ -91,10 +91,10 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.draw(batch);
-        ship.draw(batch);
         for (Star star : stars){
             star.draw(batch);
         }
+        ship.draw(batch);
         batch.end();
     }
 }
