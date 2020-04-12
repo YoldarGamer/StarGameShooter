@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -12,14 +13,18 @@ import ru.geekbrains.exception.GameException;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprites.Background;
 import ru.geekbrains.sprites.Ship;
+import ru.geekbrains.sprites.Star;
 
 public class MenuScreen extends BaseScreen {
+
+    private static final int STAR_COUNT=256;
 
     private Texture bg;
     private Texture sp;
     private Background background;
     private Ship ship;
-
+    private TextureAtlas atlas;
+    private Star[] stars;
 
     @Override
     public void show() {
@@ -27,6 +32,7 @@ public class MenuScreen extends BaseScreen {
         //bg = new Texture("textures/bg.png");
         bg = new Texture("MainBG.jpg");
         sp = new Texture("ship.png");
+        atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
         initSprites();
     }
 
@@ -40,6 +46,8 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         batch.dispose();
         bg.dispose();
+        sp.dispose();
+        atlas.dispose();
         super.dispose();
     }
 
@@ -47,6 +55,9 @@ public class MenuScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
         ship.resize(worldBounds);
+        for (Star star : stars){
+            star.resize(worldBounds);
+        }
     }
 
     @Override
@@ -59,6 +70,10 @@ public class MenuScreen extends BaseScreen {
         try {
             background = new Background(bg);
             ship = new Ship(sp);
+            stars = new Star[STAR_COUNT];
+            for (int i=0;i<STAR_COUNT;i++){
+                stars[i] = new Star(atlas);
+            }
         } catch (GameException e) {
             throw new RuntimeException(e);
         }
@@ -66,6 +81,9 @@ public class MenuScreen extends BaseScreen {
 
     private void update (float delta){
         ship.update(delta);
+        for (Star star : stars){
+            star.update(delta);
+        }
     }
 
     private void draw(){
@@ -74,6 +92,9 @@ public class MenuScreen extends BaseScreen {
         batch.begin();
         background.draw(batch);
         ship.draw(batch);
+        for (Star star : stars){
+            star.draw(batch);
+        }
         batch.end();
     }
 }
