@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.PriorityQueue;
+
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.exception.GameException;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.sprites.Background;
 import ru.geekbrains.sprites.MainShip;
 import ru.geekbrains.sprites.Star;
@@ -23,6 +26,8 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas atlas;
 
     private Star[] stars;
+
+    private BulletPool bulletPool;
     private MainShip mainShip;
 
     @Override
@@ -30,6 +35,7 @@ public class GameScreen extends BaseScreen {
         super.show();
         bg = new Texture("textures/bg.png");
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
+        bulletPool = new BulletPool();
         initSprites();
     }
 
@@ -37,6 +43,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        freeAllDestroyed();
         draw();
     }
 
@@ -54,6 +61,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         bg.dispose();
         atlas.dispose();
+        bulletPool.dispose();
         super.dispose();
     }
 
@@ -88,7 +96,7 @@ public class GameScreen extends BaseScreen {
             for (int i = 0; i < STAR_COUNT; i++) {
                 stars[i] =  new Star(atlas);
             }
-            mainShip = new MainShip(atlas);
+            mainShip = new MainShip(atlas,bulletPool);
         } catch (GameException e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +106,12 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
+        bulletPool.updateActiveSprites(delta);
         mainShip.update(delta);
+    }
+
+    public void freeAllDestroyed() {
+        bulletPool.freeAllDestroyedActiveObjects();
     }
 
     private void draw() {
@@ -110,6 +123,7 @@ public class GameScreen extends BaseScreen {
             star.draw(batch);
         }
         mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
     }
 }
