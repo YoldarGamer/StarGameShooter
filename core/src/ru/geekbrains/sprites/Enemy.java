@@ -10,12 +10,15 @@ import ru.geekbrains.pool.BulletPool;
 
 public class Enemy extends Ship {
 
+    private final Vector2 descentV;
+
     public Enemy(BulletPool bulletPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
         v = new Vector2();
         v0 = new Vector2();
         bulletV = new Vector2();
+        descentV = new Vector2(0, - 0.3f );
     }
 
     @Override
