@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.geekbrains.sprites.Enemy;
+
 public abstract class SpritesPool <T extends Sprite> {
 
     protected final List<T> activetObjects = new ArrayList<>();
@@ -50,7 +52,7 @@ public abstract class SpritesPool <T extends Sprite> {
         }
     }
 
-    public List<T> getActivetObjects() {
+    public List<T> getActiveObjects() {
         return activetObjects;
     }
 
@@ -65,5 +67,6 @@ public abstract class SpritesPool <T extends Sprite> {
         }
         System.out.println(this.getClass().getName() + " active/free: "+activetObjects.size()+"/"+freeObjects.size());
     }
+
 
 }
