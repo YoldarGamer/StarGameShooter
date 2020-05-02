@@ -37,16 +37,15 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        //bg = new Texture("textures/bg.png");
-        bg = new Texture("MainBG.jpg");
+        bg = new Texture("textures/bg.png");
         atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
         initSprites();
     }
 
     @Override
     public void render(float delta) {
-        update(delta);
-        draw();
+       update(delta);
+       draw();
     }
 
     @Override
@@ -88,7 +87,7 @@ public class MenuScreen extends BaseScreen {
             for (int i = 0; i < STAR_COUNT; i++) {
                 stars[i] =  new Star(atlas);
             }
-            buttonExit = new ButtonExit(atlas, game);
+            buttonExit = new ButtonExit(atlas);
             buttonPlay = new ButtonPlay(atlas, game);
         } catch (GameException e) {
             throw new RuntimeException(e);
@@ -102,7 +101,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void draw() {
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
+        Gdx.gl.glClearColor(0.5f, 0.7f, 0.8f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.draw(batch);

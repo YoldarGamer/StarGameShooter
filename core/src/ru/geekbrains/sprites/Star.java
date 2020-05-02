@@ -1,7 +1,6 @@
 package ru.geekbrains.sprites;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Sprite;
@@ -11,13 +10,13 @@ import ru.geekbrains.math.Rnd;
 
 public class Star extends Sprite {
 
-    private static final float HEIGHT = 0.007f;
+    private static final float HEIGHT = 0.01f;
 
     private Vector2 v;
     private Rect worldBounds;
 
     private float animateInterval = 0.5f;
-    private float animateTimer = 0;
+    private float animateTimer;
 
     public Star(TextureAtlas atlas) throws GameException {
         super(atlas.findRegion("star"));
@@ -38,14 +37,13 @@ public class Star extends Sprite {
 
     @Override
     public void update(float delta) {
-        pos.mulAdd(v,delta);
-        scale += 0.03f;
+        pos.mulAdd(v, delta);
+        scale += 0.01f;
         animateTimer += delta;
         if (animateTimer >= animateInterval) {
             animateTimer = 0;
             scale = 1;
         }
-
         if (getTop() < worldBounds.getBottom()) {
             setBottom(worldBounds.getTop());
         }

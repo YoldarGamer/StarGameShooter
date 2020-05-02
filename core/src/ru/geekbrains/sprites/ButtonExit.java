@@ -1,6 +1,5 @@
 package ru.geekbrains.sprites;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
@@ -10,7 +9,7 @@ import ru.geekbrains.math.Rect;
 
 public class ButtonExit extends ScaledButton {
 
-    public ButtonExit(TextureAtlas atlas, Game game) throws GameException {
+    public ButtonExit(TextureAtlas atlas) throws GameException {
         super(atlas.findRegion("btExit"));
     }
 
