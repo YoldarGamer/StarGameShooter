@@ -18,6 +18,7 @@ import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprites.Background;
 import ru.geekbrains.sprites.Bullet;
+import ru.geekbrains.sprites.ButtonNewGame;
 import ru.geekbrains.sprites.Enemy;
 import ru.geekbrains.sprites.GameOver;
 import ru.geekbrains.sprites.MainShip;
@@ -38,6 +39,7 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
     private MainShip mainShip;
     private GameOver gameOver;
+    private ButtonNewGame buttonNewGame;
 
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
@@ -69,6 +71,15 @@ public class GameScreen extends BaseScreen {
         state = State.PLAYING;
     }
 
+    public void startNewGame(){
+        state = State.PLAYING;
+        mainShip.startNewGame(worldBounds);
+        bulletPool.freeAllActiveObjects();
+        enemyPool.freeAllActiveObjects();
+        explosionPool.freeAllActiveObjects();
+    }
+
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -87,6 +98,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.resize(worldBounds);
         gameOver.resize(worldBounds);
+        buttonNewGame.resize(worldBounds);
     }
 
     @Override
@@ -123,6 +135,7 @@ public class GameScreen extends BaseScreen {
         if (state == State.PLAYING) {
             mainShip.touchDown(touch, pointer, button);
         }
+        buttonNewGame.touchDown(touch, pointer, button);
         return false;
     }
 
@@ -131,6 +144,7 @@ public class GameScreen extends BaseScreen {
         if (state == State.PLAYING) {
             mainShip.touchUp(touch, pointer, button);
         }
+        buttonNewGame.touchUp(touch, pointer, button);
         return false;
     }
 
@@ -143,6 +157,7 @@ public class GameScreen extends BaseScreen {
             }
             mainShip = new MainShip(atlas, bulletPool, explosionPool, laserSound);
             gameOver = new GameOver(atlas);
+            buttonNewGame = new ButtonNewGame(atlas,this);
         } catch (GameException e) {
             throw new RuntimeException(e);
         }
@@ -158,6 +173,8 @@ public class GameScreen extends BaseScreen {
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
             enemyEmitter.generate(delta);
+        } else if (state == State.GAME_OVER) {
+            buttonNewGame.update(delta);
         }
 
     }
@@ -223,6 +240,7 @@ public class GameScreen extends BaseScreen {
                 break;
             case GAME_OVER:
                 gameOver.draw(batch);
+                buttonNewGame.draw(batch);
                 break;
         }
         explosionPool.drawActiveSprites(batch);
